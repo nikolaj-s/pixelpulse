@@ -1,0 +1,13 @@
+
+.navigation-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav {
+    background-color: var(--var-secondary-color);
+    padding: 10px;
+    border-radius: 10px;
+    width: calc(100% - 20px);
+}

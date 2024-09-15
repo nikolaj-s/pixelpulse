@@ -1,0 +1,42 @@
+
+.text-input {
+    width: 100%;
+    position: relative;
+    height: auto;
+}
+
+.text-input input {
+    width: calc(100% - 12px - 6px);
+    padding: 6px;
+    height: 30px;
+    border-radius: 8px;
+    outline: none;
+    border: solid 3px var(--var-hover-color);
+    background-color: var(--var-hover-color);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    color: var(--var-text-color);
+    transition: 0.05s;
+}
+
+.text-input input:hover {
+    background-color: white;
+    border: solid 3px white;
+}
+
+.text-input input:active,
+.text-input input:focus {
+    background-color: white;
+    border: solid 3px var(--var-accent-color);
+}
+
+
+.text-input svg {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
