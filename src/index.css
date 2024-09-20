@@ -1,8 +1,8 @@
 :root {
   --var-secondary-color: #252525;
   --var-primary-text-color: #646464;
-  --var-accent-color: #78FCFC;
-  --var-hover-color: #D4D4D4;
+  --var-accent-color: #00aaaa;
+  --var-alt-color: #D4D4D4;
 }
 
 body {

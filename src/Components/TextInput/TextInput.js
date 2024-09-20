@@ -3,7 +3,7 @@ import { SearchIcon } from '../Icons/SearchIcon/SearchIcon'
 
 import "./TextInput.css";
 
-export const TextInput = ({value, action = () => {}, enter = () => {}, placeholder = "SEARCH"}) => {
+export const TextInput = ({value, action = () => {}, enter = () => {}, placeholder = "SEARCH", showSearchIcon = false}) => {
 
     const handleEnter = (e) => {
         if (e.keyCode === 13) {
@@ -14,7 +14,7 @@ export const TextInput = ({value, action = () => {}, enter = () => {}, placehold
     return (
         <div className='text-input'>
             <input onKeyUp={handleEnter} value={value} onChange={(e) => {action(e.target.value)}} type='text' placeholder={placeholder} />
-            <SearchIcon />
+            {showSearchIcon ? <SearchIcon /> : null}
         </div>
     )
 }

@@ -3,11 +3,52 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    top: 5px;
+    z-index: 999;
+    transition: 0.5s;
 }
 
 nav {
-    background-color: var(--var-secondary-color);
+    background-color: black;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
     width: calc(100% - 20px);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-width: 800px;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.nav-inner-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-icon-wrapper {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+.options-wrapper {
+    margin-top: 10px;
+}
+
+.options-wrapper .text-button {
+    margin-right: 5px;
+}
+
+.options-close-listener {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }

@@ -6,6 +6,7 @@ import "./Results.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { searchImages, selectResults } from './ResultsSlice';
 import { ImageCard } from '../../Components/ImageCard/ImageCard';
+import { VideoCard } from '../../Components/VideoCard/VideoCard';
 
 export const Results = () => {
 
@@ -20,13 +21,8 @@ export const Results = () => {
         if (urlParams.has('q') && results.length === 0) {
             console.log('fetching')
             dispatch(searchImages());
-        } else {
-            window.history.replaceState(null, '', '/');
         }
 
-        let new_url = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + urlParams.toString();
-
-        window.history.pushState({}, '', new_url);
     }, [])
 
     return (
@@ -35,7 +31,10 @@ export const Results = () => {
 
                 <Masonry gutter='5px'>
                     {results.map(result => {
-                        return <ImageCard image={result.preview} />
+                        return result.type === 'image' ?
+                        <ImageCard image={result.preview} />
+                        :
+                        <VideoCard data={result} />
                     })}
                 </Masonry>
 

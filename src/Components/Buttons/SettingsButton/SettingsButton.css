@@ -1,0 +1,22 @@
+.settings-button {
+    height: 100%;
+    width: 35px;
+    background-color: rgba(255, 255, 255, 0);
+    outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.05s;
+}
+
+.settings-button:hover {
+    background-color: rgba(255, 255, 255, 0.259);
+}
+
+.settings-button:active {
+    scale: 0.98;
+}

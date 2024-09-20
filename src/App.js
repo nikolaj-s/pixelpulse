@@ -8,8 +8,7 @@ import { Results } from './Features/Results/Results';
 function App() {
   return (
     <div className="App">
-      <Title />
-      <BrowserRouter>
+      <BrowserRouter history={History} >
         <Navigation />
         <Routes>
           <Route element={<Results />} path='/search' />
