@@ -28,7 +28,7 @@ export const searchImages = createAsyncThunk(
 
             const images = await Axios({
                 method: "POST",
-                url: 'http://10.0.0.38:3333/search-for-images',
+                url: 'https://pixelpulsebackend-c3cc3b10a201.herokuapp.com/search-for-images',
                 data: {
                     query: search_term,
                     source: source,
@@ -59,8 +59,10 @@ const ResultsSlice = createSlice({
     extraReducers: {
         [searchImages.pending]: (state, action) => {
             state.loading = true;
+            state.error = false;
         },
         [searchImages.fulfilled]: (state, action) => {
+            state.error = false;
             state.loading = false;
             state.results = action.payload;
         },
