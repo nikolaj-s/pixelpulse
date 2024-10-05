@@ -6,10 +6,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { TextInput } from '../../Components/TextInput/TextInput';
 import { selectCurrentExplicitContentOption, selectCurrentSortOption, selectExplicitContentOptions, selectOptionsMenuOpenState, selectQuery, selectSortOptions, selectSource, setOption, setQuery, setSource, toggleOptionsMenu } from './NavigationSlice';
-import { searchImages, selectResults } from '../Results/ResultsSlice';
+import { searchImages, selectLoadingState, selectResults } from '../Results/ResultsSlice';
 import { PixelPulseIcon } from '../../Components/Icons/PixelPulseIcon/PixelPulseIcon';
 import { SettingsButton } from '../../Components/Buttons/SettingsButton/SettingsButton';
 import { OptionsMenu } from '../../Components/OptionsMenu/OptionsMenu';
+import { Loading } from '../../Components/Loading/Loading';
+import { closeContent, selectContentOpen } from '../ExpandedContent/ExpandedContentSlice';
+import { ExpandedContent } from '../ExpandedContent/ExpandedContent';
 
 import "./Navigation.css";
 
@@ -23,6 +26,8 @@ export const Navigation = () => {
 
     const query = useSelector(selectQuery);
 
+    const loading = useSelector(selectLoadingState);
+
     const results = useSelector(selectResults);
 
     const optionsMenuOpenState = useSelector(selectOptionsMenuOpenState);
@@ -34,6 +39,8 @@ export const Navigation = () => {
     const currentSortOption = useSelector(selectCurrentSortOption);
 
     const currentExplicitContentOption = useSelector(selectCurrentExplicitContentOption);
+
+    const contentOpen = useSelector(selectContentOpen);
 
     const source = useSelector(selectSource);
 
@@ -61,6 +68,10 @@ export const Navigation = () => {
 
     const handleToggleOptionsMenu = () => {
 
+        if (loading) return;
+
+        if (contentOpen) dispatch(closeContent());
+
         if (optionsMenuOpenState) {
             dispatch(toggleOptionsMenu());
 
@@ -76,6 +87,10 @@ export const Navigation = () => {
         }
     }
 
+    const handleCloseContent = () => {
+        dispatch(closeContent())
+    }
+
     const handleSetOption = (selector, value) => {
         dispatch(setOption({selector: selector, value: value}));
     }
@@ -84,16 +99,63 @@ export const Navigation = () => {
         dispatch(setSource(value));
     }
 
+    React.useEffect(() => {
+
+        const state = JSON.parse(localStorage.getItem('state'));
+
+        if (state) {
+            dispatch(setOption({selector: "currentExplicitContentOption", value: state.currentExplicitContentOption}));
+            
+            dispatch(setOption({selector: 'currentSourtOption', value: state.currentSortOption}))
+        }
+
+    }, [])
+
+    React.useEffect(() => {
+
+        if (loading && optionsMenuOpenState) dispatch(toggleOptionsMenu());
+
+        if (loading) {
+            animation.start({
+                height: 300
+            })
+        } else if (!loading) {
+            animation.start({
+                height: 'auto'
+            })
+        }
+
+    // eslint-disable-next-line
+    }, [loading]) 
+
+    React.useEffect(() => {
+
+        if (contentOpen) {
+            animation.start({
+                height: 'calc(100% - 90px)',
+                maxWidth: 'calc(100% - 150px'
+            })
+        } else {
+            animation.start({
+                height: 'auto',
+                maxWidth: 800
+            })
+        }
+
+    // eslint-disable-next-line
+    }, [contentOpen])
+
     return (
         <>
             <div 
             onClick={() => {
-                if (optionsMenuOpenState) return handleToggleOptionsMenu()
+                if (optionsMenuOpenState) handleToggleOptionsMenu();
+                if (contentOpen) handleCloseContent()
             }}
             className='navigation-wrapper'
                 style={{
-                    width: 'calc(100% - 20px)',
-                    padding: results?.length > 0 ? '10px' : '0px 10px',
+                    width: 'calc(100% - 10px)',
+                    padding: results?.length > 0 ? '10px 5px' : '0px 5px',
                     height: results?.length === 0 ? '100vh' : 'auto',
                 }}
             >   
@@ -120,9 +182,11 @@ export const Navigation = () => {
                     setSource={handleSetSource}
                     />
                     : null}
+                    <Loading loading={loading} />
+                    <ExpandedContent />
                 </motion.nav>
             </div>
-            {optionsMenuOpenState ? <motion.div transition={{duration: 0.2}} initial={{opacity: 0}} animate={{opacity: 1}} onClick={handleToggleOptionsMenu} className='options-close-listener' /> : null}
+            {optionsMenuOpenState || loading || contentOpen ? <motion.div transition={{duration: 0.2}} initial={{opacity: 0}} animate={{opacity: 1}} onClick={() => {handleToggleOptionsMenu(); handleCloseContent()}} className='options-close-listener' /> : null}
         </>
     )
 }

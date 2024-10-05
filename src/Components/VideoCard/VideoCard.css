@@ -6,6 +6,8 @@
     border-radius: 10px;
     background-color: black;
     cursor: pointer;
+    width: 100%;
+    height: 100%;
 }
 
 .video-card img {

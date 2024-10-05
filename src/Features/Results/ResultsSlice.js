@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import Axios from 'axios';
-import { setQuery } from "../Navigation/NavigationSlice";
+
 import { test_data } from "../../Utilities/History";
 
 export const searchImages = createAsyncThunk(
@@ -10,9 +10,11 @@ export const searchImages = createAsyncThunk(
 
         try {
 
+            window.scrollTo(0, 0)
+
             let search_term;
 
-            const {query} = getState().NavigationSlice;
+            const {query, source, currentSortOption} = getState().NavigationSlice;
 
             const urlParams = new URLSearchParams(window.location.search);
 
@@ -24,17 +26,17 @@ export const searchImages = createAsyncThunk(
 
             if (search_term.length === 0) return rejectWithValue({message: 'invalid search'});
 
-            const images = test_data;
-
-            // const images = await Axios({
-            //     method: "POST",
-            //     url: 'http://10.0.0.38:3333/search-for-images',
-            //     data: {
-            //         query: search_term,
-            //     }
-            // }).then(res => {
-            //     return res?.data?.media;
-            // })
+            const images = await Axios({
+                method: "POST",
+                url: 'http://10.0.0.38:3333/search-for-images',
+                data: {
+                    query: search_term,
+                    source: source,
+                    sortBy: currentSortOption
+                }
+            }).then(res => {
+                return res?.data?.media;
+            })
 
             console.log(images)
             return images;
@@ -52,11 +54,11 @@ const ResultsSlice = createSlice({
         loading: false,
         results: [],
         loadingMore: false,
+        error: false
     },
     extraReducers: {
         [searchImages.pending]: (state, action) => {
             state.loading = true;
-            state.results = [];
         },
         [searchImages.fulfilled]: (state, action) => {
             state.loading = false;
@@ -64,10 +66,12 @@ const ResultsSlice = createSlice({
         },
         [searchImages.rejected]: (state, action) => {
             state.loading = false;
-            
+            state.error = true;
         }
     }
 })
+
+export const selectErrorState = state => state.ResultsSlice.error;
 
 export const selectResults = state => state.ResultsSlice.results;
 

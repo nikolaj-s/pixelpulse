@@ -8,7 +8,7 @@ const NavigationSlice = createSlice({
         showSensitiveContent: true,
         blurSensitiveContent: true,
         optionsMenuOpen: false,
-        explicitContentOptions: ['hide', 'blur', 'show'],
+        explicitContentOptions: ['blur', 'show'],
         sortOptions: ['new', 'relevance'],
         currentExplicitContentOption: 'blur',
         currentSortOption: 'relevance',
@@ -23,6 +23,8 @@ const NavigationSlice = createSlice({
         },
         setOption: (state, action) => {
             state[action.payload.selector] = action.payload.value;
+            
+            localStorage.setItem('state', JSON.stringify(state))
         },
         setSource: (state, action) => {
             state.source = action.payload;
